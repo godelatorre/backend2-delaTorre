@@ -1,0 +1,26 @@
+[
+  {
+    "title": "semilla white widow",
+    "description": "semilla medicinal",
+    "price": "2500",
+    "img": "Sin Imagen",
+    "code": "abc124",
+    "stock": "150",
+    "category": "Market",
+    "status": true,
+    "thumbnails": [],
+    "id": 2
+  },
+  {
+    "title": "Afghan Kush",
+    "description": "semilla de cannabis curativa",
+    "price": "1500",
+    "img": "Sin Imagen",
+    "code": "abc126",
+    "stock": "150",
+    "category": "Market",
+    "status": true,
+    "thumbnails": [],
+    "id": 3
+  }
+]
