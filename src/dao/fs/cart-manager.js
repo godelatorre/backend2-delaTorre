@@ -15,10 +15,12 @@ class CartManager {
             const data = await fs.readFile(this.path, "utf8");
             this.carts = JSON.parse(data);
             if (this.carts.length > 0) {
-                //Verifico si hay por lo menos un carrito creado:
+
+                //Verificacion de carrito creado:
                 this.ultId = Math.max(...this.carts.map(cart => cart.id));
-                //Utilizo el método map para crear un nuevo array que solo tenga los identificadores del carrito y con Math.max obtengo el mayor. 
+
             }
+
         } catch (error) {
             console.error("Error al cargar los carritos desde el archivo", error);
             // Si no existe el archivo, lo voy a crear. 

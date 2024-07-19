@@ -8,8 +8,8 @@
     "stock": "150",
     "category": "Market",
     "status": true,
-    "thumbnails": [],
-    "id": 2
+    "thumbnails": []
+    
   },
   {
     "title": "Afghan Kush",
@@ -20,7 +20,7 @@
     "stock": "150",
     "category": "Market",
     "status": true,
-    "thumbnails": [],
-    "id": 3
+    "thumbnails": []
+    
   }
 ]

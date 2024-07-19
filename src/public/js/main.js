@@ -19,7 +19,7 @@ const renderProductos = (data) => {
                             <button> Eliminar </button>
                         `
         contenedorProductos.appendChild(card); 
-        //Agregamos un evento al boton de eliminar: 
+        
         card.querySelector("button").addEventListener("click", () => {
             eliminarProducto(item.id); 
         })

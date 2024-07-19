@@ -4,9 +4,13 @@ import { Server } from "socket.io";
 import productsRouter from "./routes/products.router.js";
 import cartsRouter from "./routes/carts.router.js";
 import viewsRouter from "./routes/views.router.js";
+import "./database.js";
+import ProductManager from "./dao/fs/product-manager.js";
+
 
 const app = express();
 const PUERTO = 8080;
+const productManager = new ProductManager("./src/models/productos.json");
 
 // Middleware
 app.use(express.urlencoded({ extended: true }));
@@ -27,8 +31,7 @@ const httpServer = app.listen(PUERTO, () => {
     console.log(`Servidor escuchando en el puerto ${PUERTO}`);
 });
 
-import ProductManager from "./controllers/product-manager.js";
-const productManager = new ProductManager("./src/models/productos.json");
+
 
 const io = new Server(httpServer); 
 
@@ -43,14 +46,14 @@ io.on("connection", async (socket) => {
     socket.on("eliminarProducto", async (id) => {
         await productManager.deleteProduct(id);
 
-        //Le voy a enviar la lista actualizada al cliente: 
+        //Enviamos lista actualizada al cliente: 
         io.sockets.emit("productos", await productManager.getProducts());
     })
 
     //Agregamos productos por medio de un formulario: 
     socket.on("agregarProducto", async (producto) => {
         await productManager.addProduct(producto); 
-        //Le voy a enviar la lista actualizada al cliente: 
+        //Enviamos la lista actualizada al cliente: 
         io.sockets.emit("productos", await productManager.getProducts());
     })
 })
