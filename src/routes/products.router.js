@@ -6,9 +6,10 @@ const productManager = new ProductManager();
 //1) Listar todos los productos. 
 router.get("/", async (req, res) => {
     try {
-        const limit = req.query.limit;
+        const limit = parseInt(req.query.limit, 10);
         const productos = await productManager.getProducts();
-        if (limit) {
+
+        if (!isNaN(limit) && limit > 0) {
             res.json(productos.slice(0, limit));
         } else {
             res.json(productos);
@@ -28,7 +29,7 @@ router.get("/:pid", async (req, res) => {
     try {
         const producto = await productManager.getProductById(id);
         if (!producto) {
-            return res.json({
+            return res.status(404).json({
                 error: "Producto no encontrado"
             });
         }
