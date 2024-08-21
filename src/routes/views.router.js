@@ -53,7 +53,8 @@ router.get('/products', async (req, res) => {
       currentPage: productos.page,
       totalPages: productos.totalPages,
       prevLink: productos.prevLink,
-      nextLink: productos.nextLink
+      nextLink: productos.nextLink,
+      user: req.session.user // Agrega el usuario a la vista de productos
     });
 
   } catch (error) {
@@ -106,41 +107,28 @@ router.get('/', async (req, res) => {
   }
 });
 
-//Ruta para el formulario de login: 
-
+// Ruta para el formulario de login
 router.get("/login", (req, res) => {
-    if(req.session.login) {
-        return res.redirect("/products"); 
-    }
-    res.render("login");
-})
-
-
-//Ruta para el formulario de Register: 
- 
-router.get("/register", (req, res) => {
-    if(req.session.login) {
+    if (req.session.login) {
         return res.redirect("/products");
     }
-    res.render("register"); 
+    res.render("login");
+});
 
-})
-
-
-//Ruta para el formulario de Perfil: 
-
-router.get("/profile", (req, res) => {
-    if(!req.session.login) {
-        return res.redirect("/login"); 
+// Ruta para el formulario de Register
+router.get("/register", (req, res) => {
+    if (req.session.login) {
+        return res.redirect("/products");
     }
-    res.render("profile", {user: req.session.user});
-})
+    res.render("register");
+});
 
-//Enviamos al usuario a la vista de Productos: 
-router.get("/products", (req, res) => {
-    res.render("products", {user: req.session.user});
-})
-
-
+// Ruta para el formulario de Perfil
+router.get("/profile", (req, res) => {
+    if (!req.session.login) {
+        return res.redirect("/login");
+    }
+    res.render("profile", { user: req.session.user });
+});
 
 export default router;
