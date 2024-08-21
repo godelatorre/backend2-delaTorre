@@ -32,7 +32,7 @@ class CartManager {
     async agregarProductoAlCarrito(cartId, productId, quantity = 1) {
         try {
             const carrito = await this.getCarritoById(cartId);
-            const existeProducto = carrito.products.find(item => item.product.toString() === productId);
+            const existeProducto = carrito.products.find(item => item.product._id.toString() === productId);
 
             if (existeProducto) {
                 existeProducto.quantity += quantity;
@@ -58,7 +58,7 @@ class CartManager {
                 throw new Error(`No se encontró el carrito con el id ${cartId}`);
             }
 
-            const item = carrito.products.find(item => item.product.toString() === productId);
+            const item = carrito.products.find(item => item.product._id.toString() === productId);
 
             if (item) {
                 if (item.quantity <= quantityToRemove) {
@@ -84,7 +84,7 @@ class CartManager {
     async updateQuantityProductInCart(cartId, productId, quantity) {
         try {
             const carrito = await this.getCarritoById(cartId);
-            const producto = carrito.products.find(item => item.product.toString() === productId);
+            const producto = carrito.products.find(item => item.product._id.toString() === productId);
 
             if (producto) {
                 producto.quantity = quantity;

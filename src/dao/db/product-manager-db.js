@@ -12,7 +12,7 @@ class ProductManager {
                 return;
             }
 
-            //Cambiamos la validacion: 
+         //Validacion
 
             const existeProducto = await ProductModel.findOne({ code: code });
 
@@ -43,16 +43,19 @@ class ProductManager {
 
     async getProducts({ limit = 10, page = 1, sort, query } = {}) {
         try {
+            
+            limit = parseInt(limit, 10) || 10;
+            page = parseInt(page, 10) || 1;
+
+            // Calcular el número de documentos a omitir
             const skip = (page - 1) * limit;
 
             let queryOptions = {};
-
-
             if (query) {
                 queryOptions = { category: query };
             }
 
-            // Configuracion de las opciones de ordenamiento
+            // Configuración de las opciones de ordenamiento
             const sortOptions = {};
             if (sort) {
                 if (sort === 'asc' || sort === 'desc') {
@@ -60,7 +63,7 @@ class ProductManager {
                 }
             }
 
-            // Obtengo los productos con paginación, filtrado y ordenamiento
+            // Obtener los productos con paginación, filtrado y ordenamiento
             const productos = await ProductModel
                 .find(queryOptions)
                 .sort(sortOptions)
@@ -90,6 +93,7 @@ class ProductManager {
             throw error;
         }
     }
+
 
 
     async getProductById(id) {

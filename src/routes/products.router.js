@@ -6,21 +6,22 @@ const productManager = new ProductManager();
 //1) Listar todos los productos. 
 router.get("/", async (req, res) => {
     try {
-        const limit = parseInt(req.query.limit, 10);
-        const productos = await productManager.getProducts();
+        // Convertir el parámetro limit a un número entero
+        const limit = parseInt(req.query.limit, 10) || 10; 
+        const page = parseInt(req.query.page, 10) || 1;    
+        const sort = req.query.sort;
+        const query = req.query.query;
+        
+        const productos = await productManager.getProducts({ limit, page, sort, query });
 
-        if (!isNaN(limit) && limit > 0) {
-            res.json(productos.slice(0, limit));
-        } else {
-            res.json(productos);
-        }
+        res.json(productos);
     } catch (error) {
         console.error("Error al obtener productos", error);
-        res.status(500).json({
-            error: "Error interno del servidor"
-        });
+        res.status(500).json({ error: "Internal Server Error" });
     }
 });
+
+
 
 //2) Traer solo un producto por id: 
 router.get("/:pid", async (req, res) => {

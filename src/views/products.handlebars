@@ -1,3 +1,16 @@
+<header>
+    <h2> Mis Productos </h2>
+
+    <div>
+        <p>Bienvenido, {{user.first_name}} - {{user.last_name}} </p>
+        <p>Email: {{user.email}} </p>
+        <p>Rol: {{user.role}} </p>
+        <a href="/api/sessions/logout">Logout</a>
+    </div>
+</header>
+
+
+
 <h1> Productos </h1>
 {{#each productos}}
 <div class="product">

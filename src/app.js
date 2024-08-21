@@ -1,4 +1,5 @@
 import express from "express";
+import session from "express-session";
 import { engine } from "express-handlebars";
 import { Server } from "socket.io";
 import productsRouter from "./routes/products.router.js";
@@ -6,7 +7,10 @@ import cartsRouter from "./routes/carts.router.js";
 import viewsRouter from "./routes/views.router.js";
 import "./database.js";
 import ProductManager from "./dao/fs/product-manager.js";
-
+import sessionRouter from "./routes/sessions.router.js";
+import MongoStore from "connect-mongo";
+import initializePassport from "./config/passport.config.js";
+import passport from "passport";
 
 const app = express();
 const PUERTO = 8080;
@@ -16,13 +20,30 @@ const productManager = new ProductManager("./src/models/productos.json");
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("./src/public")); 
+app.use(express.urlencoded({extended: true}));
+app.use(session({
+    secret: "secretCoder", 
+    resave: true, 
+    saveUninitialized: true, 
+    store: MongoStore.create({
+        mongoUrl: "mongodb+srv://carlaguirin07:Carla0761592@cluster0.tzrap35.mongodb.net/Login?retryWrites=true&w=majority&appName=Cluster0"
+    })
+}))
 
 //Express-Handlebars
 app.engine("handlebars", engine()); 
 app.set("view engine", "handlebars"); 
 app.set("views", "./src/views"); 
 
+
+///Cambios con passport: 
+initializePassport(); 
+app.use(passport.initialize()); 
+app.use(passport.session()); 
+///
+
 // Rutas
+app.use("/api/sessions", sessionRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/", viewsRouter);
