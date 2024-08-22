@@ -11,7 +11,7 @@ import sessionRouter from "./routes/sessions.router.js";
 import MongoStore from "connect-mongo";
 import initializePassport from "./config/passport.config.js";
 import passport from "passport";
-
+import cookieParser from "cookie-parser";
 const app = express();
 const PUERTO = 8080;
 const productManager = new ProductManager("./src/models/productos.json");
@@ -21,12 +21,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("./src/public")); 
 app.use(express.urlencoded({extended: true}));
+app.use (cookieParser()),
 app.use(session({
     secret: "secretCoder", 
     resave: true, 
     saveUninitialized: true, 
     store: MongoStore.create({
-        mongoUrl: "mongodb+srv://g18delatorre:jEnoQgieIPLiRAJA@backenduno.ce2xng0.mongodb.net/Login"
+        mongoUrl: "mongodb+srv://carlaguirin07:Carla0761592@cluster0.tzrap35.mongodb.net/Login?retryWrites=true&w=majority&appName=Cluster0"
     })
 }))
 
@@ -49,7 +50,7 @@ app.use("/api/carts", cartsRouter);
 app.use("/", viewsRouter);
 
 const httpServer = app.listen(PUERTO, () => {
-    console.log(`Servidor escuchando en el puerto ${PUERTO}`);
+    console.log('Servidor escuchando en el puerto ${PUERTO}');
 });
 
 
