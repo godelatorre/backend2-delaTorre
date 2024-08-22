@@ -54,7 +54,7 @@ router.get('/products', async (req, res) => {
       totalPages: productos.totalPages,
       prevLink: productos.prevLink,
       nextLink: productos.nextLink,
-      user: req.session.user // Agrega el usuario a la vista de productos
+      user: req.session.user 
     });
 
   } catch (error) {

@@ -27,7 +27,7 @@ app.use(session({
     resave: true, 
     saveUninitialized: true, 
     store: MongoStore.create({
-        mongoUrl: "mongodb+srv://carlaguirin07:Carla0761592@cluster0.tzrap35.mongodb.net/Login?retryWrites=true&w=majority&appName=Cluster0"
+        mongoUrl: "mongodb+srv://g18delatorre:jEnoQgieIPLiRAJA@backenduno.ce2xng0.mongodb.net/Login"
     })
 }))
 
@@ -41,7 +41,7 @@ app.set("views", "./src/views");
 initializePassport(); 
 app.use(passport.initialize()); 
 app.use(passport.session()); 
-///
+
 
 // Rutas
 app.use("/api/sessions", sessionRouter);

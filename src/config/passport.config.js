@@ -27,7 +27,7 @@ const initializePassport = () => {
             let newUser = {
                 first_name,
                 last_name,
-                cart: cart._id,  // Aquí se asigna el ID del carrito al usuario
+                cart: cart._id,  
                 email,
                 age,
                 password: createHash(password)
@@ -74,7 +74,6 @@ const initializePassport = () => {
         secretOrKey: 'coderhouse'
     }, async (jwt_payload, done) => {
         try {
-            // Aquí puedes buscar el usuario en la base de datos usando el id del payload
             const user = await UserModel.findById(jwt_payload.id);
             if (!user) return done(null, false);
             return done(null, user);

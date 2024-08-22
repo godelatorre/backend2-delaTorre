@@ -4,7 +4,6 @@ import jwt from "jsonwebtoken";
 import UserModel from "../dao/models/user.model.js";
 import { createHash, isValidPassword } from "../utils/hashbcrypt.js";
 
-// Inicializamos el router
 const router = Router();
 
 // Ruta para el registro de usuarios
@@ -12,7 +11,7 @@ router.post("/register", async (req, res) => {
     const { user, password } = req.body;
 
     try {
-        // Verificamos si el usuario ya existe
+        
         const existingUser = await UserModel.findOne({ user });
 
         if (existingUser) {
@@ -66,8 +65,8 @@ router.post("/login", async (req, res) => {
 
         // Configuramos la cookie con el token
         res.cookie("coderCookieToken", token, {
-            maxAge: 3600000, // 1 hora
-            httpOnly: true   // Solo accesible por HTTP
+            maxAge: 3600000, 
+            httpOnly: true   
         });
 
         res.redirect("/api/sessions/current");
