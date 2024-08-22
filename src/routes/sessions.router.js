@@ -32,8 +32,8 @@ router.post("/register", async (req, res) => {
 
         // Configuramos la cookie con el token
         res.cookie("coderCookieToken", token, {
-            maxAge: 3600000, // 1 hora
-            httpOnly: true   // Solo accesible por HTTP
+            maxAge: 3600000, 
+            httpOnly: true   
         });
 
         res.redirect("/api/sessions/current");

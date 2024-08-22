@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-// Creamos el schema y el model de productos:
+//schema y model de productos:
 const productoSchema = new mongoose.Schema({
     title: {
         type: String,
@@ -13,7 +13,7 @@ const productoSchema = new mongoose.Schema({
     price: {
         type: Number,
         required: true,
-        min: [0, 'El precio debe ser un número positivo'] // Validación para asegurar precios positivos
+        min: [0, 'El precio debe ser un número positivo'] 
     },
     img: {
         type: String
@@ -26,7 +26,7 @@ const productoSchema = new mongoose.Schema({
     stock: {
         type: Number,
         required: true,
-        min: [0, 'El stock debe ser un número no negativo'] // Validación para asegurar stock no negativo
+        min: [0, 'El stock debe ser un número no negativo'] 
     },
     category: {
         type: String,

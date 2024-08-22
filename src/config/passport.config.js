@@ -49,7 +49,7 @@ const initializePassport = () => {
         try {
             const user = await UserModel.findOne({ email: email });
             if (!user) {
-                console.log('Este usuario no existe ahhhhh auxilio!');
+                console.log('El usuario indicado no está registrado en nuestra base de datos.');
                 return done(null, false);
             }
 
