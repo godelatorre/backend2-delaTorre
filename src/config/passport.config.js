@@ -4,10 +4,12 @@
 //Importamos los modulos: 
 import passport from "passport";
 import local from "passport-local";
-
 //Me traigo el model y las funciones de bcrypt: 
 import UserModel from "../dao/models/user.model.js";
 import { createHash, isValidPassword } from "../utils/hashbcrypt.js";
+
+import CartManager from "../dao/db/cart-manager-db.js";
+
 
 const LocalStrategy = local.Strategy;
 
@@ -23,6 +25,7 @@ const initializePassport = () => {
         const { first_name, last_name, email, age } = req.body;
 
         try {
+            const cart = await CartManager.crearCarrito();
             //Verificamos si ya existe un registro con ese mail: 
             let user = await UserModel.findOne({ email: email });
             if (user) return done(null, false);
@@ -30,6 +33,7 @@ const initializePassport = () => {
             let newUser = {
                 first_name,
                 last_name,
+                cart: crearCarrito()._id,
                 email,
                 age,
                 password: createHash(password)
