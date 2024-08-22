@@ -1,88 +1,97 @@
-//Nosotros hoy vamos a trabajar con la estrategia "passport-local". 
-//Instalamos: npm i passport passport-local
-
-//Importamos los modulos: 
-import passport from "passport";
-import local from "passport-local";
-//Me traigo el model y las funciones de bcrypt: 
-import UserModel from "../dao/models/user.model.js";
-import { createHash, isValidPassword } from "../utils/hashbcrypt.js";
-
-import CartManager from "../dao/db/cart-manager-db.js";
-
+import passport from 'passport';
+import local from 'passport-local';
+import jwt from 'passport-jwt';
+import UserModel from '../dao/models/user.model.js';
+import { createHash, isValidPassword } from '../utils/hashbcrypt.js';
+import CartManager from '../dao/db/cart-manager-db.js';
 
 const LocalStrategy = local.Strategy;
+const JWTStrategy = jwt.Strategy;
+const ExtractJwt = jwt.ExtractJwt;
 
 const initializePassport = () => {
-    //Creamos la primer estrategia para "register". 
-    passport.use("register", new LocalStrategy({
+    // Estrategia para el registro
+    passport.use('register', new LocalStrategy({
         passReqToCallback: true,
-        //Le decis aca que queres acceder al objeto request
-        usernameField: "email"
-        //El usuario sera el email que ya tengo registrado. 
+        usernameField: 'email'
     }, async (req, username, password, done) => {
-        //Me guardo los datos que vienen en el body: 
         const { first_name, last_name, email, age } = req.body;
 
         try {
-            const cart = await CartManager.crearCarrito();
-            //Verificamos si ya existe un registro con ese mail: 
+            const cartManager = new CartManager();
+            const cart = await cartManager.crearCarrito();
+
             let user = await UserModel.findOne({ email: email });
             if (user) return done(null, false);
-            //Si no existe, voy a crear uno nuevo: 
+
             let newUser = {
                 first_name,
                 last_name,
-                cart: crearCarrito()._id,
+                cart: cart._id,  // Aquí se asigna el ID del carrito al usuario
                 email,
                 age,
                 password: createHash(password)
-            }
+            };
 
             let result = await UserModel.create(newUser);
-
-            //Si todo resulta bien, podemos mandar done con el usuario generado. 
 
             return done(null, result);
 
         } catch (error) {
             return done(error);
         }
-    }))
+    }));
 
-    //Agregamos una nueva estrategia ahora para el login: 
-    passport.use("login", new LocalStrategy({
-        usernameField: "email"
+    // Estrategia para el login
+    passport.use('login', new LocalStrategy({
+        usernameField: 'email'
     }, async (email, password, done) => {
         try {
-            //Verifico si existe un usuario con ese email: 
             const user = await UserModel.findOne({ email: email });
             if (!user) {
-                console.log("Este usuario no existe ahhhhh auxilio!");
+                console.log('Este usuario no existe ahhhhh auxilio!');
                 return done(null, false);
             }
 
-            //Si existe el user, verifico la contraseña: 
             if (!isValidPassword(password, user)) return done(null, false);
             return done(null, user);
         } catch (error) {
             return done(error);
         }
-    }))
+    }));
 
-    //Serializar y deserializar. 
+    // Estrategia JWT
+    const cookieExtractor = req => {
+        let token = null;
+        if (req && req.cookies) {
+            token = req.cookies['coderCookieToken'];
+        }
+        return token;
+    };
 
+    passport.use('jwt', new JWTStrategy({
+        jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]),
+        secretOrKey: 'coderhouse'
+    }, async (jwt_payload, done) => {
+        try {
+            // Aquí puedes buscar el usuario en la base de datos usando el id del payload
+            const user = await UserModel.findById(jwt_payload.id);
+            if (!user) return done(null, false);
+            return done(null, user);
+        } catch (error) {
+            return done(error);
+        }
+    }));
+
+    // Serialización y deserialización
     passport.serializeUser((user, done) => {
         done(null, user._id);
-    })
-
+    });
 
     passport.deserializeUser(async (id, done) => {
-        let user = await UserModel.findById({_id:id});
-        done(null, user); 
-    })
+        let user = await UserModel.findById(id);
+        done(null, user);
+    });
+};
 
-
-}
-
-export default initializePassport; 
+export default initializePassport;
